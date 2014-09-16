@@ -97,6 +97,20 @@ local function _QuestLog_GetQuestScrollOffset(questIndex)
 	return scrollBarOffset;
 end
 
+local function _QuestLog_ToggleQuestWatch(questIndex)
+	if ( IsQuestWatched(questIndex) ) then
+		RemoveQuestWatch(questIndex);
+--		WatchFrame_Update();
+	else
+		if ( GetNumQuestWatches() >= MAX_WATCHABLE_QUESTS ) then -- Check this first though it's less likely, otherwise they could make the frame bigger and be disappointed
+			UIErrorsFrame:AddMessage(format(QUEST_WATCH_TOO_MANY, MAX_WATCHABLE_QUESTS), 1.0, 0.1, 0.1, 1.0);
+			return;
+		end
+		AddQuestWatch(questIndex);
+--		WatchFrame_Update();
+	end
+end
+
 -- 
 -- QuestLogTitleButton
 --
@@ -136,8 +150,7 @@ function QuestLogTitleButton_OnClick(self, button)
 			end
 			QuestLog_SetSelection(questIndex);
 		elseif ( IsModifiedClick("QUESTWATCHTOGGLE") ) then
-			local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID = GetQuestLogTitle(questIndex);
-			QuestMapQuestOptions_TrackQuest(questID);
+			_QuestLog_ToggleQuestWatch(questIndex);
 			QuestLog_SetSelection(questIndex);
 			QuestLog_Update();
 		end
@@ -786,8 +799,7 @@ end
 
 function QuestLogFrameTrackButton_OnClick(self)
 	PlaySound("igMainMenuOptionCheckBoxOn");
-	local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID = GetQuestLogTitle(GetQuestLogSelection());
-	QuestMapQuestOptions_TrackQuest(questID);
+	_QuestLog_ToggleQuestWatch(GetQuestLogSelection());
 	QuestLog_Update();
 end
 
