@@ -1,19 +1,5 @@
--- global constants
-MAX_QUESTS = 25;
-MAX_OBJECTIVES = 10;
-MAX_QUESTLOG_QUESTS = 25;
-MAX_WATCHABLE_QUESTS = 25;
-MAX_QUEST_WATCH_TIME = 300;
-
-QuestDifficultyColors["impossible"].font = QuestDifficulty_Impossible;
-QuestDifficultyColors["verydifficult"].font = QuestDifficulty_VeryDifficult;
-QuestDifficultyColors["difficult"].font = QuestDifficulty_Difficult;
-QuestDifficultyColors["standard"].font = QuestDifficulty_Standard;
-QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial;
-QuestDifficultyColors["header"].font = QuestDifficulty_Header;
 
 -- local constants
-local QUEST_TIMER_UPDATE_DELAY = 0.1;
 local GROUP_UPDATE_INTERVAL_SEC = 3;
 
 -- update optimizations
@@ -231,8 +217,6 @@ end
 
 function QuestLog_OnLoad(self)
 	self:RegisterEvent("QUEST_LOG_UPDATE");
-	self:RegisterEvent("QUEST_ACCEPTED");
-	self:RegisterEvent("QUEST_WATCH_UPDATE");
 	self:RegisterEvent("UPDATE_FACTION");
 	self:RegisterEvent("UNIT_QUEST_LOG_CHANGED");
 	self:RegisterEvent("GROUP_ROSTER_UPDATE");
@@ -249,32 +233,6 @@ function QuestLog_OnEvent(self, event, ...)
 		QuestLog_Update();
 		if ( QuestLogDetailScrollFrame:IsVisible() ) then
 			QuestLog_UpdateQuestDetails(false);
-		end
-		if (not IsTutorialFlagged(55) and TUTORIAL_QUEST_TO_WATCH) then
-			local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(GetQuestLogIndexByID(TUTORIAL_QUEST_TO_WATCH));
-			if (isComplete) then
-				TriggerTutorial(55);
-			end
-		end
-	elseif ( event == "QUEST_ACCEPTED" ) then
-		TUTORIAL_QUEST_ACCEPTED = arg2;
-		QuestPOIUpdateIcons();
-		if ( AUTO_QUEST_WATCH == "1" and GetNumQuestWatches() < MAX_WATCHABLE_QUESTS ) then
-			AddQuestWatch(arg1);
-			QuestLog_Update();
-		end
-	elseif ( event == "QUEST_WATCH_UPDATE" ) then
-		if (not IsTutorialFlagged(11) and TUTORIAL_QUEST_TO_WATCH) then
-			local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle(arg1);
-			if (questID == TUTORIAL_QUEST_TO_WATCH) then
-				TriggerTutorial(11);
-			end
-		end
-		if ( AUTO_QUEST_WATCH == "1" and 
-			GetNumQuestLeaderBoards(arg1) > 0 and 
-			GetNumQuestWatches() < MAX_WATCHABLE_QUESTS ) then
-			AddQuestWatch(arg1,MAX_QUEST_WATCH_TIME);
-			QuestLog_Update();
 		end
 	elseif ( event == "GROUP_ROSTER_UPDATE" or event == "PARTY_MEMBER_ENABLE" or event == "PARTY_MEMBER_DISABLE" ) then
 		QuestLog_Update();
@@ -300,9 +258,6 @@ function QuestLog_OnShow(self)
 	QuestLog_Update();
 	
 	QuestLogDetailFrame_AttachToQuestLog();
-	if (TutorialFrame.id == 1 or TutorialFrame.id == 55 or TutorialFrame.id == 57) then
-		TutorialFrame_Hide();
-	end
 end
 
 function QuestLog_OnHide(self)
@@ -311,18 +266,6 @@ function QuestLog_OnHide(self)
 	QuestLogShowMapPOI_UpdatePosition();
 	QuestLogControlPanel_UpdatePosition();
 	QuestLogDetailFrame_DetachFromQuestLog();
-	if (TUTORIAL_QUEST_ACCEPTED) then
-		if (not IsTutorialFlagged(2)) then
-			local _, raceName  = UnitRace("player");
-			if ( strupper(raceName) ~= "PANDAREN" ) then
-				TriggerTutorial(2);
-			end
-		end
-		if (not IsTutorialFlagged(10) and (TUTORIAL_QUEST_ACCEPTED == TUTORIAL_QUEST_TO_WATCH)) then
-			TriggerTutorial(10);
-		end
-		TUTORIAL_QUEST_ACCEPTED = nil
-	end
 end
 
 function QuestLog_OnUpdate(self, elapsed)
