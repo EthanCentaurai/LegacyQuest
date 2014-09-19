@@ -167,12 +167,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<Frame name="QuestLogDetailInset" useParentLevel="true" inherits="InsetFrameTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="QuestLogFrame"/>
-					<Anchor point="BOTTOMRIGHT" relativeTo="QuestLogFrame"/>
-				</Anchors>
-			</Frame>
+			<Frame name="QuestLogDetailInset" useParentLevel="true" inherits="InsetFrameTemplate"/>
 			<ScrollFrame name="QuestLogDetailScrollFrame" inherits="UIPanelScrollFrameTemplate">
 				<Size x="298" y="403"/>
 				<Anchors>
