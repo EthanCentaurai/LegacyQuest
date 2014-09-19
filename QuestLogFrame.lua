@@ -414,6 +414,7 @@ function QuestLog_Update()
 				end
 
 				-- figure out which tag to show, if any
+				questTag = nil;
 				if ( isComplete and isComplete < 0 ) then
 					questTag = FAILED;
 				elseif ( isComplete and isComplete > 0 ) then
