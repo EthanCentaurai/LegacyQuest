@@ -1,4 +1,8 @@
 ## Interface: 60000
+## Title: Quest Log Simulator 2015
+## Notes: Changes the quest log back to how it was before Patch 6.0.
+## Author: Ethan Centaurai
+## Version: @project-version@
 
 QuestFrameTemplates.xml
 QuestLogFrame.xml
