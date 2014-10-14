@@ -1,7 +1,7 @@
 LegacyQuest
 ===========
 
-Do you dislike the new questlog/worldmap hybrid interface introduced in Warlords of Draenor?
+Do you dislike the new questlog/worldmap hybrid introduced in Warlords of Draenor?
 
 Then this addon could be for you!
 
@@ -9,7 +9,11 @@ Then this addon could be for you!
 What it does
 ------------
 
-LegacyQuest separates the questlog from the worldmap and changes it back to the "double wide" interface from Mists of Pandaria.
+LegacyQuest provides the "double wide" quest log from Mists of Pandaria as an alternative to Blizzard's new worldmap/questlog hybrid interface.
+
+Pressing the Toggle Quest Log button on your keyboard ('L' by default) or on the mini menu on your action bars will bring up LegacyQuest's questlog instead of the new questlog.
+
+The new questlog is not overwritten by this addon and it can still be accessed from the small worldmap if you so wish.
 
 
 Configuration
