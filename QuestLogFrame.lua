@@ -1,4 +1,7 @@
 
+local _, LegacyQuest = ...
+
+
 -- local constants
 local GROUP_UPDATE_INTERVAL_SEC = 3;
 
@@ -9,7 +12,7 @@ local max = max;
 -- local helper functions
 --
 
-local function _QuestLog_HighlightQuest(questLogTitle)
+function LegacyQuest:HighlightQuest(questLogTitle)
 	local prevParent = QuestLogHighlightFrame:GetParent();
 	if ( prevParent and prevParent ~= questLogTitle ) then
 		-- set prev quest's colors back to normal
@@ -35,9 +38,9 @@ local function _QuestLog_HighlightQuest(questLogTitle)
 	end
 end
 
+function LegacyQuest:GetQuestScrollOffset(questIndex)
 -- this function returns the amount needed to adjust the scroll bar in order to get the given quest index to appear in the
 -- QuestLogScrollFrame's viewable area
-local function _QuestLog_GetQuestScrollOffset(questIndex)
 	local scrollBarOffset = 0;
 	local buttons = QuestLogScrollFrame.buttons;
 	local testButton = buttons[1];
@@ -83,7 +86,7 @@ local function _QuestLog_GetQuestScrollOffset(questIndex)
 	return scrollBarOffset;
 end
 
-local function _QuestLog_ToggleQuestWatch(questIndex)
+function LegacyQuest:ToggleQuestWatch(questIndex)
 	if ( IsQuestWatched(questIndex) ) then
 		RemoveQuestWatch(questIndex);
 --		WatchFrame_Update();
@@ -136,7 +139,7 @@ function QuestLogTitleButton_OnClick(self, button)
 			end
 			QuestLog_SetSelection(questIndex);
 		elseif ( IsModifiedClick("QUESTWATCHTOGGLE") ) then
-			_QuestLog_ToggleQuestWatch(questIndex);
+			LegacyQuest:ToggleQuestWatch(questIndex);
 			QuestLog_SetSelection(questIndex);
 			QuestLog_Update();
 		end
@@ -470,7 +473,7 @@ function QuestLog_Update()
 
 			-- Place the highlight and lock the highlight state
 			if ( questLogSelection == questIndex ) then
-				_QuestLog_HighlightQuest(questLogTitle);
+				LegacyQuest:HighlightQuest(questLogTitle);
 			else
 				questLogTitle:UnlockHighlight();
 			end
@@ -596,7 +599,7 @@ function QuestLog_SetSelection(questIndex)
 
 	QuestLogFrame.selectedIndex = questIndex;
 
-	local scrollBarOffset = _QuestLog_GetQuestScrollOffset(questIndex);
+	local scrollBarOffset = LegacyQuest:GetQuestScrollOffset(questIndex);
 	if ( scrollBarOffset ~= 0 ) then
 		-- adjust the scroll bar to show the quest, if necessary
 		-- NOTE: this must be done BEFORE you highlight the quest (otherwise, the button you need to highlight may not be visible)
@@ -614,7 +617,7 @@ function QuestLog_SetSelection(questIndex)
 		titleButton = buttons[mid];
 		id = titleButton:GetID();
 		if ( id == questIndex ) then
-			_QuestLog_HighlightQuest(titleButton);
+			LegacyQuest:HighlightQuest(titleButton);
 			break;
 		end
 		if ( id > questIndex ) then
@@ -707,7 +710,7 @@ function QuestLog_OpenToQuest(questIndex, keepOpen)
 	local selectedIndex = GetQuestLogSelection();
 --[[
 	if ( selectedIndex ~= 0 and questIndex == selectedIndex and QuestLogFrame:IsShown() and
-		 _QuestLog_GetQuestScrollOffset(questIndex) == 0 ) then
+		 LegacyQuest:GetQuestScrollOffset(questIndex) == 0 ) then
 		-- if the current quest is selected and is visible, then treat this as a toggle
 		HideUIPanel(QuestLogFrame);
 		return;
@@ -743,7 +746,7 @@ end
 
 function QuestLogFrameTrackButton_OnClick(self)
 	PlaySound("igMainMenuOptionCheckBoxOn");
-	_QuestLog_ToggleQuestWatch(GetQuestLogSelection());
+	LegacyQuest:ToggleQuestWatch(GetQuestLogSelection());
 	QuestLog_Update();
 end
 
