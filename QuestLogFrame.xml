@@ -135,83 +135,7 @@
 			</Button>
 		</Frames>
 	</Frame>
-	<Frame name="QuestLogDetailFrame" toplevel="true" enableMouse="true" parent="UIParent" hidden="true" inherits="ButtonFrameTemplate">
-		<Size x="338" y="496"/>
-		<Anchors>
-			<Anchor point="TOPLEFT"/>
-		</Anchors>
-		<Layers>
-			<Layer level="OVERLAY" textureSubLevel="-1">
-				<Texture file="Interface\QuestFrame\UI-QuestLog-BookIcon">
-					<Size x="64" y="64"/>
-					<Anchors>
-						<Anchor point="TOPLEFT" x="-6" y="7"/>
-					</Anchors>
-				</Texture>		
-			</Layer>
-			<Layer level="BACKGROUND">
-				<Texture name="$parentPageBg" file="Interface\QuestFrame\QuestBG">
-					<Size x="512" y="620"/>
-					<Anchors>
-						<Anchor point="TOPLEFT" x="6" y="-62"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-			<Layer level="ARTWORK">
-				<FontString name="QuestLogDetailTitleText" inherits="GameFontNormal" text="QUEST_DETAILS">
-					<Size x="300" y="14"/>
-					<Anchors>
-						<Anchor point="TOP" x="0" y="-5"/>
-					</Anchors>
-				</FontString>
-			</Layer>
-		</Layers>
-		<Frames>
-			<Frame name="QuestLogDetailInset" useParentLevel="true" inherits="InsetFrameTemplate"/>
-			<ScrollFrame name="QuestLogDetailScrollFrame" inherits="UIPanelScrollFrameTemplate">
-				<Size x="298" y="403"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" x="0" y="-55"/>
-				</Anchors>
-				<Layers>
-					<Layer level="ARTWORK">
-						<Texture name="$parentTop" file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
-							<Size x="31" y="102"/>
-							<Anchors>
-								<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-2" y="6"/>
-							</Anchors>
-							<TexCoords left="0" right="0.484375" top="0" bottom="0.4"/>
-						</Texture>
-						<Texture name="$parentBottom" file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
-							<Size x="31" y="106"/>
-							<Anchors>
-								<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="-2" y="-2"/>
-							</Anchors>
-							<TexCoords left="0.515625" right="1.0" top="0" bottom="0.4140625"/>
-						</Texture>
-						<Texture name="$parentMiddle" file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
-							<Size x="31" y="1"/>
-							<Anchors>
-								<Anchor point="TOP" relativeTo="$parentTop" relativePoint="BOTTOM"/>
-								<Anchor point="BOTTOM" relativeTo="$parentBottom" relativePoint="TOP"/>
-							</Anchors>
-							<TexCoords left="0" right="0.484375" top=".75" bottom="1.0"/>
-						</Texture>
-					</Layer>
-				</Layers>
-				<ScrollChild>
-					<Frame name="QuestLogDetailScrollChildFrame">
-						<Size x="298" y="403"/>
-					</Frame>
-				</ScrollChild>
-			</ScrollFrame>
-		</Frames>
-		<Scripts>
-			<OnLoad function="QuestLogDetailFrame_OnLoad"/>
-			<OnShow function="QuestLogDetailFrame_OnShow"/>
-			<OnHide function="QuestLogDetailFrame_OnHide"/>
-		</Scripts>
-	</Frame>
+
 	<Frame name="QuestLogFrame" toplevel="true" enableMouse="true" parent="UIParent" hidden="true" inherits="ButtonFrameTemplate">
 		<Size x="667" y="496"/>
 		<Anchors>
@@ -482,6 +406,43 @@
 				<Scripts>
 					<OnLoad function="QuestLogScrollFrame_OnLoad"/>
 				</Scripts>
+			</ScrollFrame>
+			<ScrollFrame name="QuestLogDetailScrollFrame" inherits="UIPanelScrollFrameTemplate">
+				<Size x="298" y="403"/>
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT" x="-33" y="-65"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentTop" file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size x="31" y="102"/>
+							<Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-2" y="6"/>
+							</Anchors>
+							<TexCoords left="0" right="0.484375" top="0" bottom="0.4"/>
+						</Texture>
+						<Texture name="$parentBottom" file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size x="31" y="106"/>
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="-2" y="-2"/>
+							</Anchors>
+							<TexCoords left="0.515625" right="1.0" top="0" bottom="0.4140625"/>
+						</Texture>
+						<Texture name="$parentMiddle" file="Interface\PaperDollInfoFrame\UI-Character-ScrollBar">
+							<Size x="31" y="1"/>
+							<Anchors>
+								<Anchor point="TOP" relativeTo="$parentTop" relativePoint="BOTTOM"/>
+								<Anchor point="BOTTOM" relativeTo="$parentBottom" relativePoint="TOP"/>
+							</Anchors>
+							<TexCoords left="0" right="0.484375" top=".75" bottom="1.0"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<ScrollChild>
+					<Frame name="QuestLogDetailScrollChildFrame">
+						<Size x="298" y="403"/>
+					</Frame>
+				</ScrollChild>
 			</ScrollFrame>
 		</Frames>
 		<Scripts>

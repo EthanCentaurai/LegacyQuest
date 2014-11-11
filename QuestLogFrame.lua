@@ -250,17 +250,12 @@ function QuestLog_OnEvent(self, event, ...)
 end
 
 function QuestLog_OnShow(self)
-	if ( QuestLogDetailFrame:IsShown() ) then
-		HideUIPanel(QuestLogDetailFrame);
-	end
 	UpdateMicroButtons();
 	PlaySound("igQuestLogOpen");
 	QuestLogControlPanel_UpdatePosition();
 	QuestLogShowMapPOI_UpdatePosition();
 	QuestLog_SetSelection(GetQuestLogSelection());
 	QuestLog_Update();
-	
-	QuestLogDetailFrame_AttachToQuestLog();
 end
 
 function QuestLog_OnHide(self)
@@ -268,7 +263,6 @@ function QuestLog_OnHide(self)
 	PlaySound("igQuestLogClose");
 	QuestLogShowMapPOI_UpdatePosition();
 	QuestLogControlPanel_UpdatePosition();
-	QuestLogDetailFrame_DetachFromQuestLog();
 end
 
 function QuestLog_OnUpdate(self, elapsed)
@@ -298,8 +292,6 @@ function QuestLog_Update()
 	
 	local numEntries, numQuests = GetNumQuestLogEntries();
 	if ( numEntries == 0 ) then
-		HideUIPanel(QuestLogDetailFrame);
-		QuestLogDetailFrame.timeLeft = nil;
 		EmptyQuestLogFrame:Show();
 		QuestLog_SetSelection(0);
 	else
@@ -327,11 +319,6 @@ function QuestLog_Update()
     --The counts may have changed with SetNearestValidSelection expanding quest headers.
     --Bug ID 170644
     numEntries, numQuests = GetNumQuestLogEntries();
-
-	-- hide the details if we don't have a selected quest
-	if ( not haveSelection ) then
-		HideUIPanel(QuestLogDetailFrame);
-	end
 
 	-- update the group timer
 	local haveGroup = IsInGroup();
@@ -544,11 +531,7 @@ end
 function QuestLog_UpdatePortrait()
 	local questPortrait, questPortraitText, questPortraitName = GetQuestLogPortraitGiver();
 	if (questPortrait and questPortrait ~= 0 and QuestLogShouldShowPortrait()) then
-		if (QuestLogDetailFrame.attached) then
-			QuestFrame_ShowQuestPortrait(QuestLogFrame, questPortrait, questPortraitText, questPortraitName, -5, -42);
-		else
-			QuestFrame_ShowQuestPortrait(QuestLogDetailFrame, questPortrait, questPortraitText, questPortraitName, -3, -42);
-		end
+		QuestFrame_ShowQuestPortrait(QuestLogFrame, questPortrait, questPortraitText, questPortraitName, -5, -42);
 	else
 		QuestFrame_HideQuestPortrait();
 	end
@@ -564,7 +547,6 @@ function QuestLog_SetSelection(questIndex)
 
 	if ( questIndex == 0 ) then
 		QuestLogFrame.selectedIndex = nil;
-		HideUIPanel(QuestLogDetailFrame);
 		QuestLogDetailScrollChildFrame:Hide();
 		QuestLogFrameCompleteButton:Hide();
 		QuestFrame_HideQuestPortrait();
@@ -629,9 +611,6 @@ function QuestLog_SetSelection(questIndex)
 
 	-- update the quest
 	QuestLog_UpdateQuestDetails(true);
-	if ( not QuestLogFrame:IsShown() ) then
-		ShowUIPanel(QuestLogDetailFrame);
-	end
 end
 
 function QuestLog_UnsetSelection()
@@ -708,27 +687,9 @@ end
 
 function QuestLog_OpenToQuest(questIndex, keepOpen)
 	local selectedIndex = GetQuestLogSelection();
---[[
-	if ( selectedIndex ~= 0 and questIndex == selectedIndex and QuestLogFrame:IsShown() and
-		 LegacyQuest:GetQuestScrollOffset(questIndex) == 0 ) then
+
+	if ( not keepOpen and selectedIndex ~= 0 and questIndex == selectedIndex ) then
 		-- if the current quest is selected and is visible, then treat this as a toggle
-		HideUIPanel(QuestLogFrame);
-		return;
-	end
-
-	local numEntries, numQuests = GetNumQuestLogEntries();
-	if ( questIndex < 1 or questIndex > numEntries ) then
-		return;
-	end
-
-	ExpandQuestHeader(0);
-	ShowUIPanel(QuestLogFrame);
-	QuestLog_SetSelection(questIndex);
---]]
-
-	if ( not keepOpen and selectedIndex ~= 0 and questIndex == selectedIndex and QuestLogDetailFrame:IsShown() ) then
-		-- if the current quest is selected and is visible, then treat this as a toggle
-		HideUIPanel(QuestLogDetailFrame);
 		return;
 	end
 
@@ -752,56 +713,6 @@ end
 
 
 --
--- QuestLogDetailFrame
---
-
-function QuestLogDetailFrame_OnShow(self)
-	PlaySound("igQuestLogOpen");
-	QuestLogControlPanel_UpdatePosition();	
-	QuestLogShowMapPOI_UpdatePosition();
-	QuestLog_UpdateQuestDetails();
-end
-
-function QuestLogDetailFrame_OnHide(self)
-	-- this function effectively deselects the selected quest
-	PlaySound("igQuestLogClose");	
-	QuestLogControlPanel_UpdatePosition();
-	QuestLogShowMapPOI_UpdatePosition();
-end
-
-function QuestLogDetailFrame_AttachToQuestLog()
-	QuestLogDetailFrame.attached = true;
-	if (QuestNPCModel:GetParent() == QuestLogDetailFrame) then
-		QuestNPCModel:SetParent(QuestLogFrame);
-		QuestNPCModel:ClearAllPoints();
-		QuestNPCModel:SetPoint("TOPLEFT", QuestLogFrame, "TOPRIGHT", -3, -34);
-	end
-	QuestLogDetailScrollFrame:SetParent(QuestLogFrame);
-	QuestLogDetailScrollFrame:ClearAllPoints();
-	QuestLogDetailScrollFrame:SetPoint("TOPRIGHT", QuestLogFrame, "TOPRIGHT", -33, -65);
-	QuestLogDetailScrollFrameScrollBar:SetPoint("TOPLEFT", QuestLogDetailScrollFrame, "TOPRIGHT", 6, -13);
-	QuestLog_UpdatePortrait();
-end
-
-function QuestLogDetailFrame_DetachFromQuestLog()
-	QuestLogDetailFrame.attached = false;
-	if (QuestNPCModel:GetParent() == QuestLogFrame) then
-		QuestNPCModel:SetParent(QuestLogDetailFrame);
-		QuestNPCModel:ClearAllPoints();
-		QuestNPCModel:SetPoint("TOPLEFT", QuestLogDetailFrame, "TOPRIGHT", -1, -34);
-	end
-	QuestLogDetailScrollFrame:SetParent(QuestLogDetailFrame);
-	QuestLogDetailScrollFrame:ClearAllPoints();
-	QuestLogDetailScrollFrame:SetPoint("TOPLEFT", QuestLogDetailFrame, "TOPLEFT", 8, -65);
-	QuestLogDetailScrollFrameScrollBar:SetPoint("TOPLEFT", QuestLogDetailScrollFrame, "TOPRIGHT", 6, -14);
-	QuestLog_UpdatePortrait();
-end
-
-function QuestLogDetailFrame_OnLoad(self)
-	QuestLogDetailFrame_DetachFromQuestLog();
-end
-
---
 -- QuestLogControlPanel
 --
 
@@ -811,10 +722,6 @@ function QuestLogControlPanel_UpdatePosition()
 		parent = QuestLogFrame;
 		QuestLogControlPanel:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 4, 1);
 		QuestLogControlPanel:SetWidth(307);
-	elseif ( QuestLogDetailFrame:IsShown() ) then
-		parent = QuestLogDetailFrame;
-		QuestLogControlPanel:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 4, 1);
-		QuestLogControlPanel:SetWidth(327);
 	end
 	if ( parent ) then
 		QuestLogControlPanel:SetParent(parent);
@@ -853,8 +760,6 @@ function QuestLogShowMapPOI_UpdatePosition()
 	local parent;
 	if ( QuestLogFrame:IsShown() ) then
 		parent = QuestLogFrame;
-	elseif ( QuestLogDetailFrame:IsShown() ) then
-		parent = QuestLogDetailFrame;
 	end
 	
 	if ( parent ) then
