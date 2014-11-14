@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Script file="QuestLogFrame.lua"/>
-	
+
 	<Button name="QuestLogTitleButtonTemplate" virtual="true">
 		<Size x="299" y="16"/>
 		<Layers>
@@ -27,26 +27,26 @@
 					<Size x="16" y="16"/>
 					<Anchors>
 						<Anchor point="LEFT"/>
-					</Anchors> 
+					</Anchors>
 				</Texture>
 			</Layer>
 		</Layers>
 		<Scripts>
 			<OnLoad>
-				QuestLogTitleButton_OnLoad(self);
+				QuestLogTitleButton_OnLoad(self)
 			</OnLoad>
 			<OnEvent>
-				QuestLogTitleButton_OnEvent(self, event, ...);
+				QuestLogTitleButton_OnEvent(self, event, ...)
 			</OnEvent>
 			<OnClick>
-				PlaySound("igMainMenuOptionCheckBoxOn");
-				QuestLogTitleButton_OnClick(self, button, down);
+				PlaySound("igMainMenuOptionCheckBoxOn")
+				QuestLogTitleButton_OnClick(self, button, down)
 			</OnClick>
 			<OnEnter>
-				QuestLogTitleButton_OnEnter(self);
+				QuestLogTitleButton_OnEnter(self)
 			</OnEnter>
 			<OnLeave>
-				QuestLogTitleButton_OnLeave(self);
+				QuestLogTitleButton_OnLeave(self)
 			</OnLeave>
 		</Scripts>
 		<NormalTexture file="Interface\Buttons\UI-MinusButton-UP">
@@ -65,7 +65,7 @@
 			<Size x="0" y="10"/>
 			<Anchors>
 				<Anchor point="LEFT" x="20" y="0"/>
-			</Anchors> 
+			</Anchors>
 		</ButtonText>
 		<NormalFont style="GameFontNormalLeft"/>
 		<HighlightFont style="GameFontHighlightLeft"/>
@@ -87,18 +87,18 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SetAbandonQuest();
-						local items = GetAbandonQuestItems();
+						SetAbandonQuest()
+						local items = GetAbandonQuestItems()
 						if ( items ) then
-							StaticPopup_Hide("ABANDON_QUEST");
-							StaticPopup_Show("ABANDON_QUEST_WITH_ITEMS", GetAbandonQuestName(), items);
+							StaticPopup_Hide("ABANDON_QUEST")
+							StaticPopup_Show("ABANDON_QUEST_WITH_ITEMS", GetAbandonQuestName(), items)
 						else
-							StaticPopup_Hide("ABANDON_QUEST_WITH_ITEMS");
-							StaticPopup_Show("ABANDON_QUEST", GetAbandonQuestName());
+							StaticPopup_Hide("ABANDON_QUEST_WITH_ITEMS")
+							StaticPopup_Show("ABANDON_QUEST", GetAbandonQuestName())
 						end
 					</OnClick>
 					<OnEnter>
-						GameTooltip_AddNewbieTip(self, ABANDON_QUEST, 1.0, 1.0, 1.0, NEWBIE_TOOLTIP_ABANDONQUEST, 1);
+						GameTooltip_AddNewbieTip(self, ABANDON_QUEST, 1.0, 1.0, 1.0, NEWBIE_TOOLTIP_ABANDONQUEST, 1)
 					</OnEnter>
 					<OnLeave function="GameTooltip_Hide"/>
 				</Scripts>
@@ -111,7 +111,7 @@
 				<Scripts>
 					<OnClick function="QuestLogFrameTrackButton_OnClick"/>
 					<OnEnter>
-						GameTooltip_AddNewbieTip(self, TRACK_QUEST, 1.0, 1.0, 1.0, NEWBIE_TOOLTIP_TRACKQUEST, 1);
+						GameTooltip_AddNewbieTip(self, TRACK_QUEST, 1.0, 1.0, 1.0, NEWBIE_TOOLTIP_TRACKQUEST, 1)
 					</OnEnter>
 					<OnLeave function="GameTooltip_Hide"/>
 				</Scripts>
@@ -124,11 +124,11 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						QuestLogPushQuest();
-						PlaySound("igQuestLogOpen");
+						QuestLogPushQuest()
+						PlaySound("igQuestLogOpen")
 					</OnClick>
 					<OnEnter>
-						GameTooltip_AddNewbieTip(self, SHARE_QUEST, 1.0, 1.0, 1.0, NEWBIE_TOOLTIP_SHAREQUEST, 1);
+						GameTooltip_AddNewbieTip(self, SHARE_QUEST, 1.0, 1.0, 1.0, NEWBIE_TOOLTIP_SHAREQUEST, 1)
 					</OnEnter>
 					<OnLeave function="GameTooltip_Hide"/>
 				</Scripts>
@@ -197,7 +197,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						HideUIPanel(QuestLogFrame);
+						HideUIPanel(QuestLogFrame)
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -213,14 +213,14 @@
 				</Layers>
 				<Scripts>
 					<OnClick>
-						ShowQuestComplete(GetQuestLogSelection());
-						WatchFrameAutoQuest_ClearPopUpByLogIndex(GetQuestLogSelection());
+						ShowQuestComplete(GetQuestLogSelection())
+						WatchFrameAutoQuest_ClearPopUpByLogIndex(GetQuestLogSelection())
 					</OnClick>
 					<OnShow>
-						UIFrameFlash(self.Flash, 0.75, 0.75, -1, nil);
+						UIFrameFlash(self.Flash, 0.75, 0.75, -1, nil)
 					</OnShow>
 					<OnHide>
-						UIFrameFlashStop(QuestLogFrameCompleteButton.Flash);
+						UIFrameFlashStop(QuestLogFrameCompleteButton.Flash)
 					</OnHide>
 				</Scripts>
 			</Button>
@@ -255,23 +255,23 @@
 				</Layers>
 				<Scripts>
 					<OnLoad>
-						self:SetWidth(self.text:GetWidth() + self.texture:GetWidth());
+						self:SetWidth(self.text:GetWidth() + self.texture:GetWidth())
 					</OnLoad>
 					<OnClick>
 						local questID = select(8, GetQuestLogTitle(QuestLogFrame.selectedIndex))
-						QuestMapFrame_OpenToQuestDetails(questID);
+						QuestMapFrame_OpenToQuestDetails(questID)
 					</OnClick>
 					<OnEnter>
-						QuestLogFrameShowMapButtonHighlight:Show();
+						QuestLogFrameShowMapButtonHighlight:Show()
 					</OnEnter>
 					<OnLeave>
-						QuestLogFrameShowMapButtonHighlight:Hide();
+						QuestLogFrameShowMapButtonHighlight:Hide()
 					</OnLeave>
 					<OnMouseDown>
-						self.texture:SetTexCoord(0.125, 0.875, 0.5, 1.0);
+						self.texture:SetTexCoord(0.125, 0.875, 0.5, 1.0)
 					</OnMouseDown>
 					<OnMouseUp>
-						self.texture:SetTexCoord(0.125, 0.875, 0.0, 0.5);
+						self.texture:SetTexCoord(0.125, 0.875, 0.0, 0.5)
 					</OnMouseUp>
 				</Scripts>
 			</Button>
@@ -377,12 +377,12 @@
 						</Anchors>
 						<Scripts>
 							<OnLoad>
-								local name = self:GetName();
-								_G[name.."BG"]:Hide();
-								_G[name.."Top"]:Hide();
-								_G[name.."Bottom"]:Hide();
-								_G[name.."Middle"]:Hide();
-								self.doNotHide = true;
+								local name = self:GetName()
+								_G[name.."BG"]:Hide()
+								_G[name.."Top"]:Hide()
+								_G[name.."Bottom"]:Hide()
+								_G[name.."Middle"]:Hide()
+								self.doNotHide = true
 							</OnLoad>
 						</Scripts>
 					</Slider>
@@ -398,7 +398,7 @@
 						</Layers>
 						<Scripts>
 							<OnLoad>
-								self:SetParent(nil);
+								self:SetParent(nil)
 							</OnLoad>
 						</Scripts>
 					</Frame>
@@ -451,7 +451,6 @@
 			<OnShow function="QuestLog_OnShow"/>
 			<OnHide function="QuestLog_OnHide"/>
 			<OnUpdate function="QuestLog_OnUpdate"/>
-			<OnMouseWheel function=""/>
 		</Scripts>
 	</Frame>
 </Ui>
